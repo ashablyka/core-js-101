@@ -224,8 +224,29 @@ function getRectangleString(/* width, height */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  let result = '';
+
+
+  for (let i = 0; i < str.length; i += 1) {
+    let targetCode;
+    const isBetweenAandM = (str.codePointAt(i) >= 65) && (str.codePointAt(i) <= 77);
+    const isBetweenNandZ = (str.codePointAt(i) > 77) && (str.codePointAt(i) <= 90);
+    const isBetweenaandm = (str.codePointAt(i) >= 97) && (str.codePointAt(i) <= 109);
+    const isBetweennandz = (str.codePointAt(i) > 109) && (str.codePointAt(i) <= 122);
+
+    if (isBetweennandz || isBetweenNandZ) {
+      targetCode = str.codePointAt(i) - 13;
+    } else if (isBetweenaandm || isBetweenAandM) {
+      targetCode = str.codePointAt(i) + 13;
+    } else {
+      targetCode = str.codePointAt(i);
+    }
+
+    result += String.fromCodePoint(targetCode);
+  }
+
+  return result;
 }
 
 /**
