@@ -203,8 +203,38 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let result = '';
+
+  for (let i = 0; i < height; i += 1) {
+    for (let j = 0; j < width; j += 1) {
+      if (i === 0) {
+        if (j === 0) {
+          result += '┌';
+        } else if (j === width - 1) {
+          result += '┐';
+        } else {
+          result += '─';
+        }
+      } else if (i === height - 1) {
+        if (j === 0) {
+          result += '└';
+        } else if (j === width - 1) {
+          result += '┘';
+        } else {
+          result += '─';
+        }
+      } else if (j === 0) {
+        result += '│';
+      } else if (j === width - 1) {
+        result += '│';
+      } else {
+        result += ' ';
+      }
+    }
+    result += '\n';
+  }
+  return result;
 }
 
 
@@ -262,8 +292,8 @@ function encodeToRot13(str) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  return typeof value === 'string' || value instanceof String;
 }
 
 
@@ -291,8 +321,31 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const cardMap = {
+    A: 0,
+    2: 1,
+    3: 2,
+    4: 3,
+    5: 4,
+    6: 5,
+    7: 6,
+    8: 7,
+    9: 8,
+    10: 9,
+    J: 10,
+    Q: 11,
+    K: 12,
+  };
+
+  const suitMap = {
+    '♣': 0,
+    '♦': 1,
+    '♥': 2,
+    '♠': 3,
+  };
+
+  return cardMap[value.slice(0, -1)] + suitMap[value.slice(-1)] * 13;
 }
 
 
