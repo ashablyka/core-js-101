@@ -96,8 +96,11 @@ function getSumBetweenNumbers(n1, n2) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  const arr = [a, b, c];
+  arr.sort((x, y) => y - x);
+
+  return arr[0] < arr[1] + arr[2];
 }
 
 
@@ -133,8 +136,18 @@ function isTriangle(/* a, b, c */) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  const x0 = rect1.left;
+  const y0 = rect1.top;
+  const x1 = x0 + rect1.width;
+  const y1 = y0 + rect1.height;
+
+  const x2 = rect2.left;
+  const y2 = rect2.top;
+  const x3 = x2 + rect2.width;
+  const y3 = y2 + rect2.height;
+
+  return !(x0 > x3 || x1 < x2 || y0 > y3 || y1 < y2);
 }
 
 
@@ -164,8 +177,11 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const { x: x1, y: y1 } = circle.center;
+  const { x: x2, y: y2 } = point;
+
+  return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) < circle.radius;
 }
 
 
@@ -180,8 +196,27 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+
+function findFirstSingleChar(str) {
+  const array = str.split('');
+
+  const result = array.find((el, i, arr) => {
+    let count = 0;
+
+    for (let j = 0; j < arr.length; j += 1) {
+      if (arr[j] === el) {
+        count += 1;
+      }
+    }
+
+    return count === 1;
+  });
+
+  if (result !== undefined) {
+    return result;
+  }
+
+  return null;
 }
 
 
@@ -207,8 +242,11 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  const startBracket = isStartIncluded ? '[' : '(';
+  const endBracket = isEndIncluded ? ']' : ')';
+
+  return `${startBracket}${Math.min(a, b)}, ${Math.max(a, b)}${endBracket}`;
 }
 
 
@@ -276,8 +314,26 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const digits = String(ccn);
+
+  let sum = 0;
+
+  for (let i = 0; i < digits.length; i += 1) {
+    let cardNum = parseInt(digits[i], 10);
+
+    if ((digits.length - i) % 2 === 0) {
+      cardNum *= 2;
+
+      if (cardNum > 9) {
+        cardNum -= 9;
+      }
+    }
+
+    sum += cardNum;
+  }
+
+  return sum % 10 === 0;
 }
 
 /**
@@ -327,8 +383,55 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const stack = [];
+
+  let result = true;
+
+  str.split('').forEach((el) => {
+    switch (el) {
+      case '[':
+        stack.push(el);
+        break;
+      case '(':
+        stack.push(el);
+        break;
+      case '{':
+        stack.push(el);
+        break;
+      case '<':
+        stack.push(el);
+        break;
+      case ']':
+        if (stack.pop() !== '[') {
+          result = false;
+        }
+        break;
+      case ')':
+        if (stack.pop() !== '(') {
+          result = false;
+        }
+        break;
+      case '}':
+        if (stack.pop() !== '{') {
+          result = false;
+        }
+        break;
+      case '>':
+        if (stack.pop() !== '<') {
+          result = false;
+        }
+        break;
+      default:
+        break;
+    }
+  });
+
+  if (stack.length) {
+    result = false;
+  }
+
+  return result;
 }
 
 
@@ -352,8 +455,16 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  const result = [];
+  let number = num;
+
+  while (number) {
+    result.push(number % n);
+    number = Math.floor(number / n);
+  }
+
+  return result.reverse().join('');
 }
 
 
